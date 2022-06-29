@@ -1,16 +1,13 @@
 package com.example.demo.controller
 
-import com.example.demo.entity.PostsJson
+import com.example.demo.request.HelloRequest
+import com.example.demo.request.SearchRequest
 import com.example.demo.response.MapResponse
 import com.example.demo.response.PostsResponse
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import org.springframework.http.HttpMethod
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder.json
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.RestTemplate
 
 
@@ -66,4 +63,40 @@ class JsonGetController {
 
         return MapResponse(status, jsonMap)
     }
+
+    /**
+     * APIキーを秘匿にする
+     */
+    @GetMapping("/secret")
+    fun jsonGetSecret(): PostsResponse {
+
+        // 取得対象のAPI
+        val url = System.getenv("JSON_URL")
+
+        // リクエストの送信
+        val restTemplate = RestTemplate()
+        val response = restTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
+
+        // 結果の取得
+        val status = response.statusCode
+        val body  = response.body
+
+        return PostsResponse(status, body)
+    }
+
+    /**
+     * 検索パラメータを使用
+     */
+    @PostMapping("/search")
+    fun jsonPostSearch(@RequestBody request: SearchRequest): String? {
+
+        // 取得対象のAPI
+        val url = "https://jsonplaceholder.typicode.com/{word}"
+
+        // リクエストの送信
+        val restTemplate = RestTemplate()
+
+        return restTemplate.getForObject(url, String::class.java, request.word)
+    }
+
 }
