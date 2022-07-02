@@ -84,19 +84,4 @@ class JsonGetController {
         return PostsResponse(status, body)
     }
 
-    /**
-     * 検索パラメータを使用
-     */
-    @PostMapping("/search")
-    fun jsonPostSearch(@RequestBody request: SearchRequest): String? {
-
-        // 取得対象のAPI
-        val url = "https://jsonplaceholder.typicode.com/{word}"
-
-        // リクエストの送信
-        val restTemplate = RestTemplate()
-
-        return restTemplate.getForObject(url, String::class.java, request.word)
-    }
-
 }
