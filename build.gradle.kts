@@ -24,6 +24,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.json:json:20180813")
 	implementation("org.jsoup:jsoup:1.15.2")
+	implementation("org.twitter4j:twitter4j-core:4.0.7")
 }
 
 tasks.withType<KotlinCompile> {
